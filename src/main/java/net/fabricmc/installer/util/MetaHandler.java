@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class MetaHandler extends CompletableHandler<List<MetaHandler.GameVersion>> {
 
 	private final String metaUrl;
-	private List<GameVersion> versions;
+	private final List<GameVersion> versions = new ArrayList<>();
 
 	public MetaHandler(String url) {
 		this.metaUrl = url;
@@ -45,7 +45,7 @@ public class MetaHandler extends CompletableHandler<List<MetaHandler.GameVersion
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
 			String json = reader.lines().collect(Collectors.joining("\n"));
 			Type type = new TypeToken<ArrayList<GameVersion>>() {}.getType();
-			versions = Utils.GSON.fromJson(json, type);
+			versions.addAll(Utils.GSON.fromJson(json, type));
 			complete(versions);
 		}
 	}
@@ -61,6 +61,13 @@ public class MetaHandler extends CompletableHandler<List<MetaHandler.GameVersion
 			return versions.stream()
 				.filter(GameVersion::isStable).findFirst().orElse(null);
 		}
+	}
+
+	public void addVersion(String version, boolean stable) {
+		GameVersion gameVersion = new GameVersion();
+		gameVersion.stable = stable;
+		gameVersion.version = version;
+		versions.add(gameVersion);
 	}
 
 	public static class GameVersion {

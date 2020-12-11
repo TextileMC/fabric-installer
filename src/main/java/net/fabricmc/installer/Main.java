@@ -73,6 +73,8 @@ public class Main {
 		GAME_VERSION_META = new MetaHandler(metaUrl + "v2/versions/game");
 		LOADER_META = new MetaHandler(metaUrl + "v2/versions/loader");
 
+		GAME_VERSION_META.addVersion("inf-20100618", false);
+
 		//Default to the help command in a headless environment
 		if(GraphicsEnvironment.isHeadless() && command == null){
 			command = "help";

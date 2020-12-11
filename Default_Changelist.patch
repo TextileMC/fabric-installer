@@ -1,0 +1,57 @@
+Index: src/main/java/net/fabricmc/installer/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/net/fabricmc/installer/Main.java b/src/main/java/net/fabricmc/installer/Main.java
+--- a/src/main/java/net/fabricmc/installer/Main.java	
++++ b/src/main/java/net/fabricmc/installer/Main.java	
+@@ -73,6 +73,8 @@
+ 		GAME_VERSION_META = new MetaHandler(metaUrl + "v2/versions/game");
+ 		LOADER_META = new MetaHandler(metaUrl + "v2/versions/loader");
+ 
++		GAME_VERSION_META.addVersion("inf-20100618", false);
++
+ 		//Default to the help command in a headless environment
+ 		if(GraphicsEnvironment.isHeadless() && command == null){
+ 			command = "help";
+Index: src/main/java/net/fabricmc/installer/util/MetaHandler.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/net/fabricmc/installer/util/MetaHandler.java b/src/main/java/net/fabricmc/installer/util/MetaHandler.java
+--- a/src/main/java/net/fabricmc/installer/util/MetaHandler.java	
++++ b/src/main/java/net/fabricmc/installer/util/MetaHandler.java	
+@@ -33,7 +33,7 @@
+ public class MetaHandler extends CompletableHandler<List<MetaHandler.GameVersion>> {
+ 
+ 	private final String metaUrl;
+-	private List<GameVersion> versions;
++	private final List<GameVersion> versions = new ArrayList<>();
+ 
+ 	public MetaHandler(String url) {
+ 		this.metaUrl = url;
+@@ -45,7 +45,7 @@
+ 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+ 			String json = reader.lines().collect(Collectors.joining("\n"));
+ 			Type type = new TypeToken<ArrayList<GameVersion>>() {}.getType();
+-			versions = Utils.GSON.fromJson(json, type);
++			versions.addAll(Utils.GSON.fromJson(json, type));
+ 			complete(versions);
+ 		}
+ 	}
+@@ -63,6 +63,13 @@
+ 		}
+ 	}
+ 
++	public void addVersion(String version, boolean stable) {
++		GameVersion gameVersion = new GameVersion();
++		gameVersion.stable = stable;
++		gameVersion.version = version;
++		versions.add(gameVersion);
++	}
++
+ 	public static class GameVersion {
+ 		String version;
+ 		boolean stable;
