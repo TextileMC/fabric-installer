@@ -35,6 +35,7 @@ public class MinecraftLaunchJson {
 	public String mainClass;
 	public transient String mainClassServer;
 	public Arguments arguments = new Arguments();
+	public String minecraftArguments;
 	public List<Library> libraries = new ArrayList<>();
 
 	//Used for reading the fabric-launch.json and populating the minecraft format
