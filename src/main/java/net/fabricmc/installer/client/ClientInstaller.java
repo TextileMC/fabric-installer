@@ -31,17 +31,20 @@ public class ClientInstaller {
 		MinecraftLaunchJson launchJson = Utils.getLaunchMeta(loaderVersion);
 		launchJson.id = profileName;
 
+		launchJson.inheritsFrom = "inf-20100618";
+
 		//Adds loader and the mappings
 		//launchJson.libraries.add(new MinecraftLaunchJson.Library(Reference.PACKAGE.replaceAll("/", ".") + ":" + Reference.MAPPINGS_NAME + ":" + gameVersion, "https://maven.concern.i.ng/"));
+		launchJson.minecraftArguments += " --fabric.game.version inf-20100618";
 		launchJson.libraries.add(new MinecraftLaunchJson.Library("net.textilemc:intermediary:inf-20100618-v2", "https://maven.concern.i.ng/"));
-		launchJson.libraries.add(new MinecraftLaunchJson.Library(Reference.PACKAGE.replaceAll("/", ".") + ":" + Reference.LOADER_NAME + ":" + loaderVersion, Reference.mavenServerUrl));
-
-		// Add arguments
-		launchJson.minecraftArguments = "'minecraftArguments': '${auth_player_name} ${auth_session} --gameDir ${game_directory} --assetsDir ${game_assets} --tweakClass net.minecraft.launchwrapper.AlphaVanillaTweaker'";
+		launchJson.libraries.add(new MinecraftLaunchJson.Library("net.textilemc:fabric-loader:0.10.8+local", "https://dl.bintray.com/pheonixvx/textile-loader/"));
 
 		// Extra libraries
 		launchJson.libraries.add(new MinecraftLaunchJson.Library("org.apache.logging.log4j:log4j-api:2.8.1", "https://libraries.minecraft.net/"));
 		launchJson.libraries.add(new MinecraftLaunchJson.Library("org.apache.logging.log4j:log4j-core:2.8.1", "https://libraries.minecraft.net/"));
+		String gsonHack = "com.";
+		String gsonHack2 ="google.code.gson:gson:2.8.0";
+		launchJson.libraries.add(new MinecraftLaunchJson.Library(gsonHack + gsonHack2, "https://libraries.minecraft.net/"));
 
 		File versionsDir = new File(mcDir, "versions");
 		File profileDir = new File(versionsDir, profileName);

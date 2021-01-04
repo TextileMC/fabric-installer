@@ -35,7 +35,7 @@ public class MinecraftLaunchJson {
 	public String mainClass;
 	public transient String mainClassServer;
 	public Arguments arguments = new Arguments();
-	public String minecraftArguments;
+	public String minecraftArguments = "${auth_player_name} ${auth_session} --gameDir ${game_directory} --assetsDir ${game_assets} --tweakClass net.minecraft.launchwrapper.AlphaVanillaTweaker";
 	public List<Library> libraries = new ArrayList<>();
 
 	//Used for reading the fabric-launch.json and populating the minecraft format
